@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Illallangi.OAuthHandler</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Andrew Cole</authors>
+    <owners>Illallangi Enterprises</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OAuth handling</description>
+    <copyright>Copyright 2019</copyright>
+  </metadata>
+</package>

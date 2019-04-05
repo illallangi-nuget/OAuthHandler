@@ -1,0 +1,118 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 1.0.{build}
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# Do not build on tags
+skip_tags: true
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# enable patching of AssemblyInfo.* files
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+# environment variables
+environment:
+  NuGetGalleryKey:
+    secure: yoWqgSa+2csVDnrUJPNSH3wuwtjn2QPrqBxkRDt/ibpWoRXKu8A0uulGyaU+/ob/
+  PowerShellGalleryKey:
+    secure: i2wYjdHh2BxJXRcouprmpgHccDSTGPMIl/SSMCvd6TfDP0IblzcxIZ1vly/SjXDm
+  GitHubKey:
+    secure: AYCqIjYRtGo9Sa3J9RQREPwICRjTT0nNCO+87sV9bbZZxqSbZnJpWN461fynib1o
+
+install:
+- ps: |
+    Install-PackageProvider -Name NuGet -Force
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# Build settings, not to be confused with "before_build" and "after_build".
+build:
+  # enable MSBuild parallel builds
+  parallel: true
+  # package projects with .nuspec files and push to artifacts
+  publish_nuget: true
+  # generate and publish NuGet symbol packages
+  publish_nuget_symbols: true
+
+# scripts to run before build
+before_build:
+  - cmd: nuget restore src
+
+# scripts to run after build (working directory and environment changes are persisted from the previous steps)
+after_build:
+  - ps: >-
+      function ZipFiles($zipfilename, $sourcedir)
+
+      {
+         [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
+         $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+         [System.IO.Compression.ZipFile]::CreateFromDirectory($sourcedir, $zipfilename, $compressionLevel, $false)
+      }
+
+
+      $binPath = "$($env:APPVEYOR_BUILD_FOLDER)\src\Illallangi.$($env:APPVEYOR_PROJECT_NAME)\bin\"
+
+      $zipName = "$($env:APPVEYOR_PROJECT_NAME)-v$($env:APPVEYOR_BUILD_VERSION).zip"
+
+      $zipFullPath = "$($binPath)$($zipName)"
+
+      ZipFiles "$($zipFullPath)" "$($binPath)$($env:CONFIGURATION)"
+
+      Push-AppveyorArtifact "$($zipFullPath)" -FileName $zipName
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+deploy:
+# Deploy to GitHub Releases
+  - provider: GitHub
+    release: v$(appveyor_build_version)
+    auth_token: $(GitHubKey)
+    artifact: /.*\.zip/
+    draft: false
+    prerelease: false
+    on:
+      branch: master
+# Deploy to NuGet Gallery
+  - provider: NuGet
+    api_key: $(NuGetGalleryKey)
+    artifact: /.*\.nupkg/
+
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
+
+notifications:
+
+  # Email
+  - provider: Email
+    to:
+      - andrew.cole@illallangi.com
+    subject: 'Build {{status}}'
+    message: "{{message}}, {{commitId}}, ..."
+    on_build_status_changed: true
