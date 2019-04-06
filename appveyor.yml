@@ -34,7 +34,7 @@ environment:
   NuGetGalleryKey:
     secure: yoWqgSa+2csVDnrUJPNSH3wuwtjn2QPrqBxkRDt/ibpWoRXKu8A0uulGyaU+/ob/
   PowerShellGalleryKey:
-    secure: i2wYjdHh2BxJXRcouprmpgHccDSTGPMIl/SSMCvd6TfDP0IblzcxIZ1vly/SjXDm
+    secure: VSxg/rbJZ/F5F6brUgHJYLOlpK8SINfXl6W0bYC8V1GMoMzplCxfE944nysyS0GX
   GitHubKey:
     secure: AYCqIjYRtGo9Sa3J9RQREPwICRjTT0nNCO+87sV9bbZZxqSbZnJpWN461fynib1o
 
