@@ -10,11 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Illallangi.Extensions;
-using Newtonsoft.Json;
 
 namespace Illallangi
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public sealed class OAuthHmacSha1SigningHandler : DelegatingHandler
     {
         public const string AuthorizationHeader = @"Authorization: OAuth realm=""" + RealmPlaceholder + @"""," +
@@ -53,7 +51,6 @@ namespace Illallangi
 
         #region Properties
 
-        [JsonProperty(@"config")]
         public IOAuthSetting Setting { get; }
 
         #endregion

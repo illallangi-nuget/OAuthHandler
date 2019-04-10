@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\illallangi-ps\TripIt\src\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -49,13 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Illallangi.OAuthHandler.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\illallangi-ps\TripIt\src\Illallangi.TripIt.Model\Illallangi.TripIt.Model.csproj">
-      <Project>{6460673E-7F41-4D6B-8569-CC3FE2DC5D96}</Project>
-      <Name>Illallangi.TripIt.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
